@@ -1072,7 +1072,7 @@ footer .credit a{color:inherit;text-decoration:none;}
         <h2 class="rsvp-title-jen">Tu presencia <em>lo es todo</em></h2>
         <p class="rsvp-text-jen">
           Conf&iacute;rmame tu asistencia antes del<br>
-          <strong>10 de Julio de 2026</strong>.<br>
+          <strong>12 de Julio de 2026</strong>.<br>
           Con mucho gusto te espero.
         </p>
 
@@ -1101,7 +1101,7 @@ footer .credit a{color:inherit;text-decoration:none;}
 
         <div class="rsvp-deadline-jen">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm.5 5v5.25l4.5 2.67-.75 1.23L11 13V7h1.5z"/></svg>
-          Fecha l&iacute;mite &middot; 10 Julio 2026
+          Fecha l&iacute;mite &middot; 12 Julio 2026
         </div>
       </div>
     </div>
@@ -1290,7 +1290,7 @@ gsap.fromTo('.itv4-card',{opacity:0,y:24,scale:.95},{
 (function(){
   var PANEL_API = 'https://panel-invitados.vercel.app/api/confirmar';
   var RSVP_URL  = 'https://xv-natalia.vercel.app';
-  var DEADLINE  = new Date(2026, 6, 10, 23, 59, 59, 999);
+  var DEADLINE  = new Date(2026, 6, 12, 23, 59, 59, 999);
   var frozen    = Date.now() > DEADLINE.getTime();
   var params    = new URLSearchParams(window.location.search);
   var urlPara   = (params.get('para')  || '').trim();
@@ -1496,6 +1496,34 @@ gsap.fromTo('.rsvp-deadline-jen',{opacity:0,letterSpacing:'1em'},{opacity:1,lett
     });
     rsvpBtn2.addEventListener('mouseleave',function(){gsap.to(rsvpBtn2,{x:0,y:0,duration:.6,ease:'elastic.out(1,.5)'}); });
   }
+})();
+</script>
+<script>
+/* ELYSIUM AUDIO UNLOCK v1 — la musica se estrena DENTRO del primer gesto real del invitado.
+   iOS/Chrome retiran el permiso del gesto a los pocos ms, asi que un play() que corre al
+   terminar el video del sobre llega tarde y es rechazado en silencio. */
+(function(){
+  if(window.__elyAudioUnlock) return; window.__elyAudioUnlock=1;
+  var done=false, tries=0;
+  function A(){ return document.querySelector('audio'); }
+  function unlock(){
+    if(done) return;
+    var a=A(); if(!a) return;
+    try{ if(a.preload==='none'){ a.preload='auto'; a.load(); } }catch(e){}
+    if(!a.paused){ done=true; return; }
+    var p;
+    try{ p=a.play(); }catch(e){ return; }
+    if(p && p.then){ p.then(function(){ done=true; }).catch(function(){}); }
+    else { done=true; }
+  }
+  ['pointerdown','touchstart','touchend','click','keydown'].forEach(function(ev){
+    document.addEventListener(ev, unlock, {capture:true, passive:true});
+  });
+  var iv=setInterval(function(){
+    var a=A();
+    if(done || (a && !a.paused)){ done=true; clearInterval(iv); return; }
+    if(++tries>120) clearInterval(iv);
+  },1000);
 })();
 </script>
 </body>
